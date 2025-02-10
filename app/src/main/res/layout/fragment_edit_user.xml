@@ -34,7 +34,7 @@
                 android:layout_gravity="center"
                 android:text="Pawfect Match"
                 android:textColor="@color/pawfect_white"
-                android:textSize="25sp"
+                android:textSize="30sp"
                 android:textStyle="bold"
                 tools:ignore="HardcodedText" />
 
