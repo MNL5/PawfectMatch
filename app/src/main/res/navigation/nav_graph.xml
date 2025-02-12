@@ -9,6 +9,10 @@
         android:name="com.example.pawfectmatch.fragments.post.PostsListFragment"
         android:label="fragment_posts_list" />
     <fragment
+        android:id="@+id/recommendationFragment"
+        android:name="com.example.pawfectmatch.fragments.recommendation.RecommendationFragment"
+        android:label="fragment_recommendation" />
+    <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.pawfectmatch.fragments.login.LoginFragment"
         android:label="fragment_login">
