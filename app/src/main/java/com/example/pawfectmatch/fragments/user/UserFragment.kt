@@ -6,8 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.pawfectmatch.R
+import com.example.pawfectmatch.adapters.OnPostItemClickListener
+import com.example.pawfectmatch.adapters.PostType
+import com.example.pawfectmatch.adapters.PostsRecyclerAdapter
 import com.example.pawfectmatch.databinding.FragmentUserBinding
 
 private const val USER_ID = "user_ID"
@@ -21,6 +25,7 @@ class UserFragment : Fragment() {
     private var binding: FragmentUserBinding? = null
 
     private var onCreateListener: OnCreateListener? = null
+    private var onEditPostListener: OnPostItemClickListener? = null
 
     private var userId: String? = null
 
@@ -68,7 +73,22 @@ class UserFragment : Fragment() {
         binding = null
     }
 
-    private fun setupPostList() {// TODO: fetch post
+    private fun setupPostList() {
+        binding?.postsRecyclerView?.setHasFixedSize(true)
+        val layoutManager = LinearLayoutManager(context)
+        binding?.postsRecyclerView?.layoutManager = layoutManager
+        val viewModel = viewModel ?: throw Exception("ViewModel is null")
+        val adapter = PostsRecyclerAdapter(emptyList(), viewModel)
+        binding?.postsRecyclerView?.adapter = adapter
+
+        adapter.editPostListener = onEditPostListener
+        adapter.fragmentManager = getChildFragmentManager()
+
+        adapter.postType = PostType.PROFILE
+
+        viewModel.posts.observe(viewLifecycleOwner) { posts ->
+            adapter.updatePosts(posts)
+        }
     }
 
     private fun setupUser() {
@@ -101,6 +121,11 @@ class UserFragment : Fragment() {
 
     fun setOnCreate(listener: OnCreateListener): UserFragment {
         this.onCreateListener = listener
+        return this
+    }
+
+    fun setOnEditPostListener(listener: OnPostItemClickListener): UserFragment {
+        this.onEditPostListener = listener
         return this
     }
 }

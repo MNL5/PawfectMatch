@@ -2,6 +2,7 @@ package com.example.pawfectmatch.data.models
 
 import androidx.room.DatabaseView
 import androidx.room.PrimaryKey
+import androidx.room.Relation
 
 @DatabaseView(
     viewName = "inflatedPosts",
@@ -18,6 +19,13 @@ data class InflatedPost(
     var content: String = "",
     var animalPictureUrl: String = "",
     var avatarUrl: String = "",
+    @Relation(
+        parentColumn = "id",
+        entityColumn = "postId",
+        entity = PawPrint::class,
+        projection = ["userId"]
+    )
+    var pawsList: List<String>,
     var isAdopt: Boolean = false,
     var lastUpdated: Long? = null
 )

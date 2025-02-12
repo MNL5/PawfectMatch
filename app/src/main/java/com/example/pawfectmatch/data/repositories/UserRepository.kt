@@ -150,7 +150,6 @@ class UserRepository : ImageLoader {
 
     suspend fun signIn(email: String, password: String) {
         auth.signInWithEmailAndPassword(email, password).await()
-
     }
 
     fun logout() {

@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.pawfectmatch.R
+import com.example.pawfectmatch.adapters.OnPostItemClickListener
+import com.example.pawfectmatch.data.models.InflatedPost
 import com.example.pawfectmatch.data.repositories.UserRepository
 import com.example.pawfectmatch.databinding.FragmentUserBinding
 
@@ -26,6 +28,14 @@ class ProfileFragment : Fragment() {
                 binding?.profileToolbar?.setOnMenuItemClickListener {
                     onMenuItemClick(it)
                 }
+            }
+        })
+
+        fragment.setOnEditPostListener(object : OnPostItemClickListener {
+            override fun onClickListener(post: InflatedPost) {
+                val action =
+                    ProfileFragmentDirections.actionProfileFragmentToPostFormFragment(post.id)
+                findNavController().navigate(action)
             }
         })
 
