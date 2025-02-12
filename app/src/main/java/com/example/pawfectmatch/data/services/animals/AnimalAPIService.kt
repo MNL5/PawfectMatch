@@ -9,7 +9,7 @@ interface AnimalAPIService {
     ): AnimalResponse
 
     @GET("breed/{breed}/images/random")
-    suspend fun getRandomBreedPicture(@Path("breed") breed: String): AnimalPictureResponse
+    suspend fun getRandomBreedPicture(@Path("breed", encoded = true) breed: String): AnimalPictureResponse
 
     companion object {
         private val apiService: AnimalAPIService = create()

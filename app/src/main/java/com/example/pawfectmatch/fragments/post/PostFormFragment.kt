@@ -60,7 +60,9 @@ class PostFormFragment : Fragment() {
                         if (selected.isNotEmpty()) {
                             withContext(Dispatchers.Main) {
                                 val randomImage: String =
-                                    viewModel.fetchRandomPicture(selected.split(" ").last())
+                                    viewModel.fetchRandomPicture(
+                                        selected.split(" ").reversed().joinToString("/")
+                                    )
                                 viewModel.imageUri.value = randomImage
                             }
                         }
