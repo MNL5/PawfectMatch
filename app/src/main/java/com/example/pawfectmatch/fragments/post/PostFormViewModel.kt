@@ -20,11 +20,11 @@ class PostFormViewModel : ViewModel() {
     val imageUri = MutableLiveData("")
     var postId: String? = null
 
-    val isContentValid = MutableLiveData(true)
-    val isAnimalValid = MutableLiveData(true)
-    val isImageUriValid = MutableLiveData(true)
+    private val isContentValid = MutableLiveData(true)
+    private val isAnimalValid = MutableLiveData(true)
+    private val isImageUriValid = MutableLiveData(true)
+    private val isFormValid: Boolean get() = isContentValid.value == true && isImageUriValid.value == true && isAnimalValid.value == true
     val isLoading = MutableLiveData(false)
-    val isFormValid: Boolean get() = isContentValid.value == true && isImageUriValid.value == true && isAnimalValid.value == true
 
 
     fun initForm(postId: String) {

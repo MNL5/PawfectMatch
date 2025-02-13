@@ -25,7 +25,7 @@ class LoginViewModel : ViewModel() {
     fun login(onFailure: (error: Exception?) -> Unit) {
         validateForm()
         if (!isFormValid) {
-            onFailure(null)
+            onFailure(RuntimeException("Form is invalid"))
             return
         }
 
@@ -36,6 +36,7 @@ class LoginViewModel : ViewModel() {
                 UserRepository.getInstance().signIn(email, password)
             } catch (e: Exception) {
                 Log.e("Login", "Error signing in user", e)
+                UserRepository.getInstance().logout()
                 withContext(Dispatchers.Main) { onFailure(e) }
             }
         }

@@ -11,7 +11,6 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.pawfectmatch.R
@@ -45,7 +44,7 @@ class PostViewHolder(
     private var paw: Button = itemView.findViewById(R.id.post_row_paw_button)
     private var date: TextView = itemView.findViewById(R.id.date)
     private var progressBarAvatar: View = itemView.findViewById(R.id.progress_bar_avatar)
-    private var progressBarRestaurant: View = itemView.findViewById(R.id.progress_bar_animal)
+    private var progressBarAnimal: View = itemView.findViewById(R.id.progress_bar_animal)
 
     private var post: InflatedPost? = null
 
@@ -122,13 +121,13 @@ class PostViewHolder(
         }
 
         Glide.with(itemView.context).clear(animalImage)
-        progressBarRestaurant.visibility = View.VISIBLE
+        progressBarAnimal.visibility = View.VISIBLE
         imageLoaderViewModel.getImageUrl(post.id, PostRepository.getInstance()) {
             if (post.id == this.post?.id) {
                 Glide.with(itemView.context)
                     .load(it)
                     .into(animalImage)
-                progressBarRestaurant.visibility = View.GONE
+                progressBarAnimal.visibility = View.GONE
             }
         }
         if (postType != PostType.PROFILE) {
@@ -160,7 +159,6 @@ class PostViewHolder(
         when (postType) {
             PostType.PROFILE -> {
                 username.visibility = View.GONE
-                paw.visibility = View.INVISIBLE
                 avatar.visibility = View.GONE
                 progressBarAvatar.visibility = View.GONE
 
