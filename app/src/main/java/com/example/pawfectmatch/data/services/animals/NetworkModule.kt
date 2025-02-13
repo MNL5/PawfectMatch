@@ -9,7 +9,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class NetworkModule {
 
     companion object {
-        private const val BASE_URL = "https://dog.ceo/api/breeds/list/"
+        private const val BASE_URL = "https://dog.ceo/api/"
     }
 
     private val authInterceptor = Interceptor { chain ->

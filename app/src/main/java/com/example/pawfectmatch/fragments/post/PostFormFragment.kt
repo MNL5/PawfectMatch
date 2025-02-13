@@ -16,12 +16,16 @@ import androidx.core.net.toUri
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.pawfectmatch.R
 import com.example.pawfectmatch.databinding.FragmentPostFormBinding
 import com.example.pawfectmatch.utils.BaseAlert
 import com.yalantis.ucrop.UCrop
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class PostFormFragment : Fragment() {
     private val args: PostFormFragmentArgs by navArgs()
@@ -50,6 +54,23 @@ class PostFormFragment : Fragment() {
             viewModel.initForm(postId)
         } else {
             viewModel.initForm()
+            viewModel.selectedAnimal.observe(viewLifecycleOwner) { selected ->
+                viewModel.viewModelScope.launch(Dispatchers.IO) {
+                    try {
+                        if (selected.isNotEmpty()) {
+                            withContext(Dispatchers.Main) {
+                                val randomImage: String =
+                                    viewModel.fetchRandomPicture(
+                                        selected.split(" ").reversed().joinToString("/")
+                                    )
+                                viewModel.imageUri.value = randomImage
+                            }
+                        }
+                    } catch (e: Exception) {
+                        Log.e("Random Picture", "Error fetching selected animal random picture", e)
+                    }
+                }
+            }
         }
 
         return binding?.root

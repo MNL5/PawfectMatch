@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/comment_row_main"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:padding="4dp">
+
+    <ImageView
+        android:id="@+id/comment_row_avatar"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="4dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_goneMarginBottom="6dp" />
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/progress_bar_avatar"
+        style="@style/Widget.MaterialComponents.CircularProgressIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_gravity="center"
+        android:indeterminate="true"
+        app:layout_constraintBottom_toBottomOf="@+id/comment_row_avatar"
+        app:layout_constraintEnd_toEndOf="@+id/comment_row_avatar"
+        app:layout_constraintStart_toStartOf="@+id/comment_row_avatar"
+        app:layout_constraintTop_toTopOf="@+id/comment_row_avatar" />
+
+    <TextView
+        android:id="@+id/comment_row_username"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:text="Username"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/comment_row_avatar"
+        app:layout_constraintTop_toTopOf="@id/comment_row_avatar" />
+
+    <TextView
+        android:id="@+id/comment_row_content"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Content"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/comment_row_username"
+        app:layout_constraintTop_toBottomOf="@id/comment_row_username" />
+
+    <ImageView
+        android:id="@+id/comment_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:src="@drawable/vertical_dots"
+        app:layout_constraintTop_toTopOf="@id/comment_row_username"
+        app:layout_constraintBottom_toBottomOf="@id/comment_row_username"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/comment_menu"
+        app:layout_constraintBottom_toBottomOf="@id/comment_menu"
+        app:layout_constraintEnd_toStartOf="@id/comment_menu"
+        android:text="00/00/0000" />
+</androidx.constraintlayout.widget.ConstraintLayout>

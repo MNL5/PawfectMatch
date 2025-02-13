@@ -29,19 +29,13 @@ class InflatedPostRepository {
 
     fun getAll(): LiveData<List<InflatedPost>> {
         refresh()
-        val loggedUserId = UserRepository.getInstance().getLoggedUserId() ?: throw Exception("User not logged in")
+        val loggedUserId = UserRepository.getInstance().getLoggedUserId() ?: ""
         return AppLocalDB.getInstance().inflatedPostDao().getAll(loggedUserId)
     }
 
     fun getByUserId(userId: String): LiveData<List<InflatedPost>> {
         refresh()
         return AppLocalDB.getInstance().inflatedPostDao().getByUserId(userId)
-    }
-
-    fun getByAnimalId(animalId: String): LiveData<List<InflatedPost>> {
-        refresh()
-        val loggedUserId = UserRepository.getInstance().getLoggedUserId() ?: throw Exception("User not logged in")
-        return AppLocalDB.getInstance().inflatedPostDao().getByAnimalId(animalId, loggedUserId)
     }
 
     fun getIsLoading(): LiveData<Boolean> {
@@ -63,7 +57,7 @@ class InflatedPostRepository {
             }
         }, Callable {
             runBlocking {
-                AnimalRepository.getInstance().refresh()
+                PawPrintRepository.getInstance().refresh()
             }
         }, Callable {
             runBlocking {

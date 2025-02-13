@@ -9,19 +9,22 @@ import com.example.pawfectmatch.data.models.InflatedPost
 import com.example.pawfectmatch.utils.ImageLoaderViewModel
 
 enum class PostType {
-    REGULAR, PROFILE, ANIMAL
+    REGULAR, PROFILE
 }
 
 interface OnPostItemClickListener {
     fun onClickListener(post: InflatedPost)
 }
 
-class PostsRecyclerAdapter(private var posts: List<InflatedPost>, private val imageLoaderViewModel: ImageLoaderViewModel) :
+class PostsRecyclerAdapter(
+    private var posts: List<InflatedPost>,
+    private val imageLoaderViewModel: ImageLoaderViewModel
+) :
     RecyclerView.Adapter<PostViewHolder>() {
 
-    var restaurantListener: OnPostItemClickListener? = null
     var userListener: OnPostItemClickListener? = null
     var editPostListener: OnPostItemClickListener? = null
+    var pawPostListener: OnPostItemClickListener? = null
     var fragmentManager: FragmentManager? = null
     var postType = PostType.REGULAR
 
@@ -35,9 +38,9 @@ class PostsRecyclerAdapter(private var posts: List<InflatedPost>, private val im
         )
         return PostViewHolder(
             itemView,
-            restaurantListener,
             userListener,
             editPostListener,
+            pawPostListener,
             fragmentManager,
             imageLoaderViewModel,
             postType

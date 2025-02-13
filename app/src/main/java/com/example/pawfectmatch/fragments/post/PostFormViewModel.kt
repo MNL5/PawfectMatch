@@ -65,6 +65,10 @@ class PostFormViewModel : ViewModel() {
         return animalList
     }
 
+    suspend fun fetchRandomPicture(breed: String): String {
+        return AnimalAPIService.getRandomPicture(breed).message ?: ""
+    }
+
     fun initForm() {
         isLoading.value = true
         viewModelScope.launch(Dispatchers.IO) {

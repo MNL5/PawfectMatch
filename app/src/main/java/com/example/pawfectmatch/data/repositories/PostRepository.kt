@@ -5,11 +5,9 @@ import android.content.SharedPreferences
 import androidx.core.net.toUri
 import com.example.pawfectmatch.App
 import com.example.pawfectmatch.data.local.AppLocalDB
-import com.example.pawfectmatch.data.models.Animal
 import com.example.pawfectmatch.data.models.Post
 import com.example.pawfectmatch.utils.ImageLoader
 import com.google.firebase.Timestamp
-import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.runBlocking
@@ -80,38 +78,6 @@ class PostRepository : ImageLoader {
 
     override suspend fun getImagePath(imageId: String): String {
         return imageRepository.getImagePathById(imageId)
-    }
-
-    suspend fun getByAnimalIdAndUserId(animalId: String, userId: String): Post? {
-        var post =
-            AppLocalDB.getInstance().postDao().getByAnimalIdAndUserId(animalId, userId)
-
-        if (post == null) {
-            val posts = db.collection(COLLECTION)
-                .whereEqualTo(Post.ANIMAL_ID_KEY, animalId)
-                .whereEqualTo(Post.USER_ID_KEY, userId)
-                .get()
-                .await().documents.map { document ->
-                    document.data?.let {
-                        Post.fromJSON(it).apply { id = document.id }
-                    }
-                }
-            if (posts.size != 1) return null
-            post = posts[0]
-            if (post == null) return null
-            val postId = post.id
-
-            post.animalPictureUrl = imageRepository.downloadAndCacheImage(
-                imageRepository.getImageRemoteUri(postId),
-                postId
-            )
-
-            AppLocalDB.getInstance().postDao().insertAll(post)
-        }
-
-        val postId = post.id
-
-        return post.apply { animalPictureUrl = imageRepository.getImagePathById(postId) }
     }
 
     fun delete(postId: String, onError: () -> Unit) {

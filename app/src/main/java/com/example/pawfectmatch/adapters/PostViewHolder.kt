@@ -1,5 +1,7 @@
 package com.example.pawfectmatch.adapters
 
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
@@ -9,12 +11,14 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.pawfectmatch.R
 import com.example.pawfectmatch.data.models.InflatedPost
 import com.example.pawfectmatch.data.repositories.PostRepository
 import com.example.pawfectmatch.data.repositories.UserRepository
+import com.example.pawfectmatch.fragments.comment.CommentsFragment
 import com.example.pawfectmatch.utils.BaseAlert
 import com.example.pawfectmatch.utils.ImageLoaderViewModel
 import com.google.firebase.Timestamp
@@ -23,9 +27,9 @@ import java.util.Date
 
 class PostViewHolder(
     itemView: View,
-    animalListener: OnPostItemClickListener?,
     userListener: OnPostItemClickListener?,
     editPostListener: OnPostItemClickListener?,
+    pawPostListener: OnPostItemClickListener?,
     fragmentManager: FragmentManager?,
     private val imageLoaderViewModel: ImageLoaderViewModel,
     private val postType: PostType
@@ -38,6 +42,7 @@ class PostViewHolder(
     private var animalImage: ImageView = itemView.findViewById(R.id.post_row_animal_image)
     private var avatar: ImageView = itemView.findViewById(R.id.post_row_avatar)
     private var comment: Button = itemView.findViewById(R.id.post_row_comment_button)
+    private var paw: Button = itemView.findViewById(R.id.post_row_paw_button)
     private var date: TextView = itemView.findViewById(R.id.date)
     private var progressBarAvatar: View = itemView.findViewById(R.id.progress_bar_avatar)
     private var progressBarRestaurant: View = itemView.findViewById(R.id.progress_bar_animal)
@@ -53,11 +58,18 @@ class PostViewHolder(
             val post = post
             if (post != null) userListener?.onClickListener(post)
         }
-        animal.setOnClickListener {
-            val post = post
-            if (post != null) animalListener?.onClickListener(post)
+        comment.setOnClickListener {
+            val postId = post?.id
+            if (fragmentManager != null && postId != null) CommentsFragment.display(
+                fragmentManager,
+                postId
+            )
         }
-        // TODO: on comment click create comment
+
+        paw.setOnClickListener {
+            val post = post
+            if (post != null) pawPostListener?.onClickListener(post)
+        }
 
         menu.setOnClickListener {
             PopupMenu(menu.context, menu).apply {
@@ -132,8 +144,14 @@ class PostViewHolder(
             }
         }
 
-        val isMenuShown = post.userId == UserRepository.getInstance().getLoggedUserId()
-        if (isMenuShown) {
+        val activeUser = UserRepository.getInstance().getLoggedUserId()
+        if (post.pawsList.contains(activeUser)) {
+            paw.backgroundTintList = null
+        } else {
+            paw.backgroundTintList = ColorStateList.valueOf(Color.BLACK)
+        }
+
+        if (post.userId == activeUser) {
             menu.visibility = View.VISIBLE
         } else {
             menu.visibility = View.GONE
@@ -142,6 +160,7 @@ class PostViewHolder(
         when (postType) {
             PostType.PROFILE -> {
                 username.visibility = View.GONE
+                paw.visibility = View.INVISIBLE
                 avatar.visibility = View.GONE
                 progressBarAvatar.visibility = View.GONE
 
@@ -152,32 +171,6 @@ class PostViewHolder(
                     ConstraintSet.START,
                     ConstraintSet.PARENT_ID,
                     ConstraintSet.START
-                )
-                constraintSet.applyTo(layout)
-            }
-
-            PostType.ANIMAL -> {
-                animal.visibility = View.INVISIBLE
-
-                val constraintSet = ConstraintSet()
-                constraintSet.clone(layout)
-                constraintSet.connect(
-                    R.id.post_row_animal,
-                    ConstraintSet.TOP,
-                    R.id.post_row_avatar,
-                    ConstraintSet.TOP
-                )
-                constraintSet.connect(
-                    R.id.post_row_animal,
-                    ConstraintSet.BOTTOM,
-                    R.id.post_row_avatar,
-                    ConstraintSet.BOTTOM
-                )
-                constraintSet.connect(
-                    R.id.post_row_content,
-                    ConstraintSet.TOP,
-                    R.id.post_row_avatar,
-                    ConstraintSet.BOTTOM
                 )
                 constraintSet.applyTo(layout)
             }

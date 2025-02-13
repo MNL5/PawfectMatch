@@ -1,6 +1,5 @@
 package com.example.pawfectmatch.fragments.post
 
-import android.graphics.Rect
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,12 +9,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.pawfectmatch.R
 import com.example.pawfectmatch.adapters.OnPostItemClickListener
 import com.example.pawfectmatch.adapters.PaddedItemDecoration
 import com.example.pawfectmatch.adapters.PostsRecyclerAdapter
 import com.example.pawfectmatch.data.models.InflatedPost
+import com.example.pawfectmatch.data.repositories.UserRepository
 import com.example.pawfectmatch.databinding.FragmentPostsListBinding
 
 class PostsListFragment : Fragment() {
@@ -30,7 +29,6 @@ class PostsListFragment : Fragment() {
             inflater, R.layout.fragment_posts_list, container, false
         )
         bindViews()
-
         setupList()
 
         binding?.swipeRefreshLayout?.setOnRefreshListener {
@@ -68,6 +66,17 @@ class PostsListFragment : Fragment() {
                 val action =
                     PostsListFragmentDirections.actionGlobalUserPageFragment(post.userId)
                 findNavController().navigate(action)
+            }
+        }
+
+        adapter.pawPostListener = object : OnPostItemClickListener {
+            override fun onClickListener(post: InflatedPost) {
+                val loginUser = UserRepository.getInstance().getLoggedUserId()
+                if (loginUser != null) {
+                    if (post.pawsList.contains(loginUser))
+                        viewModel.dispawPost(loginUser, post.id)
+                    else viewModel.pawPost(loginUser, post.id)
+                }
             }
         }
 
