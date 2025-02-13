@@ -1,5 +1,7 @@
 package com.example.pawfectmatch.data.services.gemini
 
+import com.example.pawfectmatch.data.models.Recommendation
+import com.google.gson.Gson
 import retrofit2.http.Query
 import retrofit2.http.Body
 import retrofit2.http.POST
@@ -13,6 +15,7 @@ interface GeminiApiService {
 
     companion object {
         private const val TOKEN = ""
+        private val GSON = Gson()
 
         private val apiService: GeminiApiService = create()
 
@@ -20,7 +23,7 @@ interface GeminiApiService {
             return NetworkModule().retrofit.create(GeminiApiService::class.java)
         }
 
-        suspend fun getRecommendation(animals: List<String>, userNeed: String): String {
+        suspend fun getRecommendation(animals: List<String>, userNeed: String): Recommendation {
             val requestBody = ContentRequest(
                 contents = listOf(
                     Content(
@@ -37,8 +40,11 @@ interface GeminiApiService {
                             
                             My need: $userNeed.
                             
-                            Return: your answer in a string format as Below, Remove the brackets
-                             { Recommended Dog breed }, { Reason why this dog is a good fit for the need }
+                            I want in the response only the json so I will do JSON.parse in JS and I will get an object.
+                            Use this JSON schema:
+  
+                            Return: {'breed': str, 'reason': str}
+                            breed: must be in lower letter
                         """.trimIndent()
                             )
                         )
@@ -48,14 +54,10 @@ interface GeminiApiService {
             )
 
             val recommendationString =
-                TOKEN
-            apiService.getBreedRecommendation(
-                requestBody
-            ).candidates.get(0).content.parts.get(
-                0
-            ).text
-
-            return recommendationString
+                apiService.getBreedRecommendation(
+                    requestBody
+                ).candidates[0].content.parts[0].text
+            return GSON.fromJson(recommendationString, Recommendation::class.java)
         }
     }
 }

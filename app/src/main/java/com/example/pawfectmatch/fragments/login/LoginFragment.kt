@@ -39,8 +39,11 @@ class LoginFragment : Fragment() {
 
         binding?.loginButton?.setOnClickListener {
             showProgressBar()
-            viewModel.login({ error -> onLoginFailure(error) })
-            findNavController().navigate(R.id.action_loginFragment_to_postsListFragment)
+            viewModel.login { error -> onLoginFailure(error) }
+            UserRepository.getInstance().getLoggedUserId()
+                .let {
+                    findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToPostsListFragment())
+                }
         }
 
         return binding?.root

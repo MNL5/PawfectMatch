@@ -7,6 +7,7 @@ import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
+import androidx.transition.Visibility
 import com.bumptech.glide.Glide
 import com.example.pawfectmatch.R
 import com.example.pawfectmatch.data.models.InflatedComment
@@ -63,6 +64,10 @@ class CommentViewHolder(
 
     fun bind(comment: InflatedComment?, position: Int) {
         this.comment = comment
+
+        if (comment?.userId != UserRepository.getInstance().getLoggedUserId()) {
+            menu.visibility = View.INVISIBLE
+        }
 
         layout.alpha = 1F
         name.text = comment?.userName

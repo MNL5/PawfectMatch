@@ -47,9 +47,8 @@
 
             <com.example.pawfectmatch.views.EditTextInput
                 android:id="@+id/recommendation_need"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
                 android:layout_marginTop="12dp"
                 android:ems="10"
                 android:gravity="start|top"
@@ -60,16 +59,15 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/recommendation_toolbar"
+                app:layout_constraintWidth_percent="0.8"
                 tools:ignore="HardcodedText" />
 
             <Button
                 android:id="@+id/recommendation_search"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="32dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="30dp"
                 android:background="@drawable/send"
-                android:padding="8dp"
                 android:text=""
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/recommendation_need"
@@ -78,31 +76,43 @@
 
 
             <TextView
-                android:id="@+id/recommendation_content"
+                android:id="@+id/recommendation_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="32dp"
+                android:layout_marginEnd="32dp"
+                android:text="@={viewModel.recommendationTitle}"
+                android:textColor="@android:color/black"
+                android:textSize="22sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/recommendation_need"
+                app:layout_constraintWidth_percent="0.7" />
+
+            <TextView
+                android:id="@+id/recommendation_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="32dp"
                 android:text="@={viewModel.recommendationContent}"
                 android:textColor="@android:color/black"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/recommendation_need" />
+                app:layout_constraintTop_toBottomOf="@id/recommendation_title"
+                app:layout_constraintWidth_percent="0.7" />
 
-            <com.google.android.material.progressindicator.CircularProgressIndicator
-                android:id="@+id/progress_bar"
-                style="@style/Widget.MaterialComponents.CircularProgressIndicator"
-                android:layout_width="wrap_content"
-                android:layout_height="35dp"
-                android:layout_gravity="center"
-                android:indeterminate="true"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="parent"
+            <ImageView
+                android:id="@+id/recommendation_animal_image"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                android:layout_marginStart="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@id/recommendation_content" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

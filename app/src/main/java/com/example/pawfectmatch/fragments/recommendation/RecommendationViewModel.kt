@@ -2,18 +2,21 @@ package com.example.pawfectmatch.fragments.recommendation
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.pawfectmatch.data.models.Recommendation
 import com.example.pawfectmatch.data.services.animals.AnimalAPIService
 import com.example.pawfectmatch.data.services.gemini.GeminiApiService
+import com.example.pawfectmatch.utils.ImageLoaderViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class RecommendationViewModel : ViewModel() {
-    val animalNames: MutableLiveData<List<String>> = MutableLiveData(ArrayList())
+class RecommendationViewModel : ImageLoaderViewModel() {
+    private val animalNames: MutableLiveData<List<String>> = MutableLiveData(ArrayList())
+    val recommendationAnimalURL = MutableLiveData("")
     val content = MutableLiveData("")
     val recommendationContent = MutableLiveData("")
+    val recommendationTitle = MutableLiveData("")
     val isLoading = MutableLiveData(false)
 
     fun initForm() {
@@ -47,7 +50,9 @@ class RecommendationViewModel : ViewModel() {
         return animalList
     }
 
-    fun fetchResponse(onFailure: (error: Exception?) -> Unit) {
+    fun fetchResponse(
+        onFailure: (error: Exception?) -> Unit
+    ) {
         isLoading.value = true
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -58,7 +63,9 @@ class RecommendationViewModel : ViewModel() {
                 ) {
                     val recommendation = fetchRecommendation(animalNames.value!!, content.value!!)
                     withContext(Dispatchers.Main) {
-                        recommendationContent.value = recommendation
+                        recommendationContent.value = recommendation.reason
+                        recommendationTitle.value = recommendation.breed
+                        recommendationAnimalURL.value = fetchRandomPicture(recommendation.breed)
                     }
                 } else {
                     withContext(Dispatchers.Main) { onFailure(Exception("Animal List is empty or Content is Empty")) }
@@ -72,7 +79,14 @@ class RecommendationViewModel : ViewModel() {
         }
     }
 
-    private suspend fun fetchRecommendation(animalName: List<String>, userDesire: String): String {
+    private suspend fun fetchRecommendation(
+        animalName: List<String>,
+        userDesire: String
+    ): Recommendation {
         return GeminiApiService.getRecommendation(animalName, userDesire)
+    }
+
+    private suspend fun fetchRandomPicture(breed: String): String {
+        return AnimalAPIService.getRandomPicture(breed).message ?: ""
     }
 }

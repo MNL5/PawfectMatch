@@ -29,13 +29,18 @@ class InflatedPostRepository {
 
     fun getAll(): LiveData<List<InflatedPost>> {
         refresh()
-        val loggedUserId = UserRepository.getInstance().getLoggedUserId() ?: ""
-        return AppLocalDB.getInstance().inflatedPostDao().getAll(loggedUserId)
+        return AppLocalDB.getInstance().inflatedPostDao().getAll()
     }
 
     fun getByUserId(userId: String): LiveData<List<InflatedPost>> {
         refresh()
         return AppLocalDB.getInstance().inflatedPostDao().getByUserId(userId)
+    }
+
+    fun getByAnimal(animalId: String): LiveData<List<InflatedPost>> {
+        refresh()
+        val loggedUserId = UserRepository.getInstance().getLoggedUserId() ?: ""
+        return AppLocalDB.getInstance().inflatedPostDao().getByAnimalId(animalId, loggedUserId)
     }
 
     fun getIsLoading(): LiveData<Boolean> {

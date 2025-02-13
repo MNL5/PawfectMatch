@@ -12,6 +12,7 @@ import com.example.pawfectmatch.R
 import com.example.pawfectmatch.adapters.OnPostItemClickListener
 import com.example.pawfectmatch.adapters.PostType
 import com.example.pawfectmatch.adapters.PostsRecyclerAdapter
+import com.example.pawfectmatch.data.repositories.UserRepository
 import com.example.pawfectmatch.databinding.FragmentUserBinding
 
 private const val USER_ID = "user_ID"
